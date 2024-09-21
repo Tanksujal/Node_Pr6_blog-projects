@@ -1,0 +1,71 @@
+<%- include('header') %>
+<%- include('aside') %>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">No</th>
+            <th scope="col">Name</th>
+            <th scope="col">Describtion</th>
+            <th scope="col">Image</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% blog.map((val,i)=>{%>
+            <tr>
+              <th scope="row"><%=++i%></th>
+              <td><%=val.title%></td>
+              <td><%=val.description%></td>
+              <td>
+                <img src="../uploads/<%=val.image%>" alt="">
+              </td>
+              <td>
+                <a href="/deleteblog?id=<%=val._id%>" type="submit" class="btn btn-danger">Delete</a>
+              </td>
+              <td>
+                <a href="/editblog?id=<%=val._id%>" type="submit" class="btn btn-primary">Update</a>
+              </td>
+            </tr>
+          <%})%>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="https://cdn.rawgit.com/bootstrap-wysiwyg/bootstrap3-wysiwyg/master/dist/bootstrap3-wysihtml5.all.min.js"></script>
+<script>
+  $(function() {
+  $(".bcontent").wysihtml5({
+    toolbar: {
+      "image": false
+    }
+  });
+  
+  $(document).on('change', '.btn-file :file', function() {
+    var input = $(this);
+    var numFiles = input.get(0).files ? input.get(0).files.length : 1;
+    console.log(input.get(0).files);
+    var label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+    input.trigger('fileselect', [numFiles, label]);
+  });
+  
+  $('.btn-file :file').on('fileselect', function(event, numFiles, label){
+    var input = $(this).parents('.input-group').find(':text');
+    var log = numFiles > 1 ? numFiles + ' files selected' : label;
+    
+    if( input.length ) {
+      input.val(log);
+    } else {
+      if( log ){ alert(log); }
+    }
+    
+  });
+});
+</script>
+<%- include('footer') %>
